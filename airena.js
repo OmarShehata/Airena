@@ -4,6 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
+app.set('port', (process.env.PORT || 5000));
+
 var idArray = [];
 
 /////////////Tell Socket.io to accept connections
@@ -44,6 +46,6 @@ app.get('/', function(req, res){
 app.use("/src",express.static(path.join(__dirname, 'src')));
 
 //If you're running locally, you can now open localhost:8080 in a web browser and see it running!
-http.listen(8080, function(){
-  console.log('listening on *:8080');
+http.listen(app.get('port'), function(){
+  console.log('listening on port',app.get('port'));
 });
