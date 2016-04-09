@@ -25,6 +25,10 @@ window.onload=function(){
 		playerArray[uniqueID] = newPlayer
 	}
 
+	var player = new PlayerObject(stage)
+	player.shape.x = 300;
+	player.shape.y = 100;
+
 	var socket = io();
 	socket.on('new-user', function(id){
 		CreateEnemyUser(id)
@@ -41,9 +45,9 @@ window.onload=function(){
 
 
 	
-	var player = new PlayerObject(stage)
-	player.shape.x = 300;
-	player.shape.y = 100;
+	
+
+
 
 	var tint = new ScreenTint(stage)
 
@@ -51,7 +55,8 @@ window.onload=function(){
 	this.document.onkeydown = keydown;
     this.document.onkeyup = keyup;
     function keydown(event) {
-	    keys[event.keyCode] = true;
+    	//Disable keyboard when code editor is open
+    	if($('#code_editor').css("display") == "none") keys[event.keyCode] = true;
 	}
 
 	function keyup(event) {
@@ -71,16 +76,81 @@ window.onload=function(){
 		stage.x += ((-player.shape.x+stage.canvas.width/2) - stage.x) * 0.3;
 		stage.y += ((-player.shape.y+stage.canvas.height/2) - stage.y )* 0.3;
 		tint.update()
+		//console.log(codeMirror.getValue())
 
 		for(var p in playerArray) playerArray[p].update()
 		//Send player position
 		socket.emit('update-position',{x:player.shape.x,y:player.shape.y,rot:player.shape.rotation,player_id:player.id})
 	}
+	//Simulate key press
+	socket.on('key-press',function(msg){
+		var pl = player;
+		console.log(msg)
+		if(msg.id != player.id) pl = playerArray[msg.id];
+		if(msg.keyMap['right']) pl.rotateRight();
+		if(msg.keyMap['left']) pl.rotateLeft();
+		if(msg.keyMap['up']) pl.thrust();
+	})	
+
 	//Update other player's positions
 	socket.on('update-position',function(msg){
-		playerArray[msg.player_id].shape.x = msg.x;
-		playerArray[msg.player_id].shape.y = msg.y;
-		playerArray[msg.player_id].shape.rotation = msg.rot;
+		var pl = player;
+		if(msg.player_id != player.id) pl = playerArray[msg.player_id];
+		if(pl == undefined){
+			console.log("UNDEFINED!",msg.player_id);
+			return;
+		}
+		pl.shape.x = msg.x;
+		pl.shape.y = msg.y;
+		pl.shape.rotation = msg.rot;
 	})
 
+	var options = {}
+		//options['lineWrapping'] = true;
+		options['lineNumbers'] = true;
+
+	var codeMirror = CodeMirror(document.getElementById('code_editor'),options);
+	var defaultCode = ""
+
+	//Load code from local storage
+	if(localStorage.savedCode != undefined){
+		codeMirror.setValue(localStorage.savedCode)
+	}
+
+
+	$.ajax({
+            url : "src/defaultCode.js",
+            dataType: "text",
+            success : function (data) {
+                defaultCode = data;
+            }
+        });
+
+	$('#code_editor').css("display","none");
+	//Set up code button 
+	$('#code_button').click(function(evt){
+		$('#code_button').css("display","none");
+		$('#close_button').css("display","block");
+		$('#reload_button').css("display","block");
+		$('#code_editor').css("display","block");
+		//Load default if nothing is saved
+		if(localStorage.savedCode == undefined){
+			codeMirror.setValue(defaultCode)
+		}
+	})
+	$('#close_button').click(function(evt){
+		$('#code_button').css("display","block");
+		$('#close_button').css("display","none");
+		$('#reload_button').css("display","none");
+		$('#code_editor').css("display","none");
+	})
+	$('#reload_button').click(function(evt){
+		console.log(defaultCode)
+		codeMirror.setValue(defaultCode)
+	})
+	codeMirror.on("change",function(evt){
+		localStorage.savedCode = codeMirror.getValue();
+		socket.emit("code-change",{savedCode:codeMirror.getValue(),id:player.id})
+	})
+	
 }

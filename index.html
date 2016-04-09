@@ -2,15 +2,68 @@
 <html>
   <head>
     <title>Airena</title>
-
+    <!-- Include CodeMirror -->
+  <script src="src/lib/codemirror.js"></script>
+  <link rel="stylesheet" href="src/lib/codemirror.css">
+  <script src="src/lib/javascript.js"></script>
     <style>
     /* We want our scene to span the entire window */
     body {
         margin: 0px;
         overflow: hidden;
       }
+    #code_button {
+      position: fixed;
+      top:10px;
+      left:10px;
+      font-size:32px;
+    }
+    #close_button {
+      display: none;
+      position: fixed;
+      top:10px;
+      left:10px;
+      font-size: 32px;
+    }
+    #reload_button {
+      display: none;
+      position: fixed;
+      top:50px;
+      left:10px;
+      font-size: 28px;
+    }
+    #reload_button:hover {
+      cursor: pointer;
+      color:rgba(0,0,0,0.5);
+    }
+    #code_button:hover {
+      cursor: pointer;
+      color:rgba(0,0,0,0.5);
+    }
+    #close_button:hover {
+      cursor: pointer;
+      color:rgba(0,0,0,0.5);
+    }
+    #code_editor {
+      width: 70%;
+      height: 100%;
+      /*background-color: #F7F7F7;*/
+      position: fixed;
+      top: 0px;
+      left:0px;
+      padding-left: 40px;
+      border-right:1px black dotted;
+    }
+    .CodeMirror {
+      height:100%;
+      background:rgba(255,255,255,0.5);
+    }
+
  
   </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  
+
   </head>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
@@ -18,8 +71,14 @@
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 
   <body>
-  
   <canvas id="game_canvas" width="800" height="600"></canvas>
+
+  
+  <div id="code_editor"></div>
+  <div id="code_button"><i class="fa fa-code"></i></div>
+  <div id="close_button"><i class="fa fa-times"></i></div>
+  <div id="reload_button"><i class="fa fa-refresh"></i></div>
+
   <script type="text/javascript" src="src/screenTint.js"></script>
   <script type="text/javascript" src="src/player.js"></script>
   <script type="text/javascript" src="src/init.js"></script>
