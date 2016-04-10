@@ -58,6 +58,22 @@
       height:100%;
       background:rgba(255,255,255,0.5);
     }
+    #error_banner {
+      background: rgba(255,0,0,0.8);
+      width: 70%;
+      height: 30px;
+      bottom: 20px;
+      left:40px;
+      position: absolute;
+      z-index:100;
+      text-align: center;
+      display: none;
+    }
+    #error_text {
+      font-size: 16px;
+      vertical-align: -webkit-baseline-middle;
+      color:white;
+    }
 
  
   </style>
@@ -74,10 +90,16 @@
   <canvas id="game_canvas" width="800" height="600"></canvas>
 
   
-  <div id="code_editor"></div>
+  <div id="code_editor">
+    
+  </div>
+  <div id="error_banner">
+    <span id="error_text">An example error!</span>
+  </div>
   <div id="code_button"><i class="fa fa-code"></i></div>
   <div id="close_button"><i class="fa fa-times"></i></div>
   <div id="reload_button"><i class="fa fa-refresh"></i></div>
+
 
   <script type="text/javascript" src="src/screenTint.js"></script>
   <script type="text/javascript" src="src/player.js"></script>

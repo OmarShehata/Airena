@@ -65,6 +65,7 @@ window.onload=function(){
 
 
 	function GameUpdate(){
+		if(player.id == undefined) return;//Don't run anything until we're connected
 		if(keys[37]) player.rotateLeft() 
 		if(keys[39]) {
 			player.rotateRight()
@@ -85,7 +86,7 @@ window.onload=function(){
 	//Simulate key press
 	socket.on('key-press',function(msg){
 		var pl = player;
-		console.log(msg)
+		//console.log(msg)
 		if(msg.id != player.id) pl = playerArray[msg.id];
 		if(msg.keyMap['right']) pl.rotateRight();
 		if(msg.keyMap['left']) pl.rotateLeft();
@@ -97,7 +98,7 @@ window.onload=function(){
 		var pl = player;
 		if(msg.player_id != player.id) pl = playerArray[msg.player_id];
 		if(pl == undefined){
-			console.log("UNDEFINED!",msg.player_id);
+			//console.log("UNDEFINED!",msg.player_id);
 			return;
 		}
 		pl.shape.x = msg.x;
@@ -151,6 +152,14 @@ window.onload=function(){
 	codeMirror.on("change",function(evt){
 		localStorage.savedCode = codeMirror.getValue();
 		socket.emit("code-change",{savedCode:codeMirror.getValue(),id:player.id})
+		//Hide error bar
+		$('#error_banner').css("display","none")
+	})
+
+	//Catch and display syntax errors
+	socket.on("syntax-error",function(msg){
+		$('#error_banner').css("display","block")
+		$('#error_text').html(msg.errorText)
 	})
 	
 }
