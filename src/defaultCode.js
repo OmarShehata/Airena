@@ -5,7 +5,8 @@ function doStep(player,enemyArray,saved){
 	saved.counter ++;
 	if(saved.counter > 60){
 		if(saved.direction == "right") saved.direction = "left"; else saved.direction = "right";
-	}
+		saved.counter = 0;
+    }
 
 	var keys = {right:false,left:false,up:false,space:false};
 	keys[saved.direction] = true;
