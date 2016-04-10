@@ -42,6 +42,7 @@ io.on('connection', function(socket){
 
   //If the server gets a 'update-position' message, tell everyone
   socket.on('update-position', function(msg){
+    if(playerInfo[msg.player_id] == undefined) return;//Make sure this player actually exists here
     socket.broadcast.emit('update-position', msg);
     //Save position info
     playerInfo[msg.player_id].x = msg.x;
