@@ -203,7 +203,7 @@ window.onload=function(){
 			tint.flash(10)
 			quake(20)
 			player.setHealth(player.health-0.2)
-			if(player.health <= 0) $('#game_over').css("display","block")
+			if(player.health <= 0.001) $('#game_over').css("display","block")
 			//Update health 
 			socket.emit("update-health",{health:player.health,id:player.id})
 		}
@@ -264,7 +264,7 @@ window.onload=function(){
 		var pl = player;
 		if(msg.id != player.id) pl = playerArray[msg.id];
 		pl.setHealth(msg.health)
-		if(msg.id == player.id && pl.health <= 0) $('#game_over').css("display","block")
+		if(msg.id == player.id && pl.health <= 0.001) $('#game_over').css("display","block")
 	})
 
 	//Update other player's positions
