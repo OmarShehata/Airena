@@ -49,6 +49,16 @@ io.on('connection', function(socket){
     playerInfo[msg.player_id].rotation = msg.rot;
   });
 
+  //Tell everyone when a health update occurs
+  socket.on('update-health', function(msg){
+    socket.broadcast.emit('update-health', msg);
+  })
+  //Tell everyone when someone shoots
+  socket.on('shoot', function(msg){
+    socket.broadcast.emit('shoot', msg);
+  })
+
+
   //If the servers gets code, save it and keep running it
   socket.on('code-change',function(msg){
     if(codeArray[msg.id] == undefined){

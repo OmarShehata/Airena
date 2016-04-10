@@ -74,6 +74,28 @@
       vertical-align: -webkit-baseline-middle;
       color:white;
     }
+    .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* IE/Edge */
+    user-select: none;           /* non-prefixed version, currently
+                                    not supported by any browser */
+  }
+    #game_over {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      font-size: 40px;
+      font-style: Helvetica;
+      display: none;
+    }
 
  
   </style>
@@ -104,6 +126,10 @@
   <script type="text/javascript" src="src/screenTint.js"></script>
   <script type="text/javascript" src="src/player.js"></script>
   <script type="text/javascript" src="src/init.js"></script>
+  <div id="game_over">
+    <h1 class='noselect'>Game Over</h1>
+    <p id="respawn" class='noselect'>Click to respawn</p>
+  </div>
   
   </body>
 </html>

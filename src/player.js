@@ -18,6 +18,8 @@ var PlayerObject = function(stage_ref,color) {
     var thrustSpeed = 1.5;
     var thrustDamping = 0.93;
     var thrustAcc = 0;
+    var hurtDelay = 0;
+    var frozen = 0;
 
     var self = {};
 
@@ -27,6 +29,7 @@ var PlayerObject = function(stage_ref,color) {
     shapeObj.graphics.setStrokeStyle(3).beginStroke(outerColor).drawPolyStar( 0,0,  30,  3,  0,  30 ).endStroke()
     stage.addChild(shapeObj);
     self.shape = shapeObj;
+    
 
 
 
@@ -35,6 +38,7 @@ var PlayerObject = function(stage_ref,color) {
     }
 
     function rotate(dir){
+        if(frozen > 0) return;
         //The faster you're moving, the slower you can rotate
         var extraFactor = 1-(thrustAcc / 30);
         rotationAcc += (rotationSpeed + rotationSpeed*extraFactor)* dir;
@@ -45,17 +49,36 @@ var PlayerObject = function(stage_ref,color) {
     self.rotateLeft = function(){
         rotate(-1)
     }
+
+    self.bump = function(vx,vy){
+        thrustAcc = thrustSpeed * 2;
+        shapeObj.rotation = Math.atan2(vy,vx) * (180/Math.PI)+90;
+    }
+    self.freeze = function(time){
+        frozen = time;
+    }
+
     self.update = function(){
+        frozen --;
+        hurtDelay--; 
+        if(frozen > 0 || health <= 0) {
+            rotationAcc = 0;
+            thrustAcc = 0;
+            return;
+        }
         rotationAcc *= rotationDamping;
         shapeObj.rotation += rotationAcc;
         thrustAcc *= thrustDamping;
 
         var angle = (shapeObj.rotation-90)*(Math.PI/180)
         shapeObj.x += Math.cos(angle) * thrustAcc;
-        shapeObj.y += Math.sin(angle) * thrustAcc;        
+        shapeObj.y += Math.sin(angle) * thrustAcc;     
+
+          
     }
 
     self.thrust = function(){
+        if(frozen > 0) return;
         thrustAcc += thrustSpeed;
 
     }
@@ -63,6 +86,8 @@ var PlayerObject = function(stage_ref,color) {
 
 	//Define our methods. 
 	self.setHealth = function(num){
+        if(hurtDelay > 0 || num < 0) return;
+        hurtDelay = 60;
         health = num;
         shapeObj.graphics.clear()
 
@@ -82,9 +107,10 @@ var PlayerObject = function(stage_ref,color) {
         rightCorner = {x:8,y:-radius+10}
         leftCorner = {x:-8,y:-radius+10}
         shapeObj.graphics.beginFill(tipColor).mt(rightCorner.x,rightCorner.y).lt(tip.x,tip.y).lt(leftCorner.x,leftCorner.y).endFill()
-
+        self.health = health;
     }
     self.setHealth(health)
+    self.health = health;
 	
     return self;
 };
