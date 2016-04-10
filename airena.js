@@ -7,7 +7,6 @@ const vm = require('vm');
 const util = require('util')
 var gameloop = require('node-gameloop');
 
-
 app.set('port', (process.env.PORT || 5000));
 
 var idArray = [];
