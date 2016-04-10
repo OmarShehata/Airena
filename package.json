@@ -4,6 +4,9 @@
   "description": "Write & edit AI code on the fly to fight in the arena!",
   "dependencies": {
     "express": "^4.10.2",
-    "socket.io": "^1.4.4"
+    "node-gameloop": "^0.1.0",
+    "path": "^0.12.7",
+    "socket.io": "^1.4.4",
+    "util": "^0.10.3"
   }
 }
