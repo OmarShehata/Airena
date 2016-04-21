@@ -37,6 +37,7 @@ My (rough) current to do:
 * Create save slots for code in-game
 * Create more interesting AI examples to run in the game as examples
 * Decouple the code running mechanic from the actual game
+* Create rooms/id's so not everyone gets dropped in the same room when they open the link
 
 ### Project Setup 
 All of the server logic and the code that runs the Javascript code in a sandbox is in **airena.js**. The client side game logic is in **src/init.js**
