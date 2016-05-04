@@ -5,9 +5,9 @@ window.onload=function(){
 	createjs.Ticker.setFPS(60);
 	resize();
 	//Full screen canvas
-	function resize() { 
+	function resize() {
 	    stage.canvas.width = window.innerWidth;
-	    stage.canvas.height = window.innerHeight;     
+	    stage.canvas.height = window.innerHeight;
 	  }
 	//Game loop
 	createjs.Ticker.addEventListener("tick", handleTick);
@@ -121,7 +121,7 @@ window.onload=function(){
 
 	function GameUpdate(){
 		if(player.id == undefined) return;//Don't run anything until we're connected
-		if(keys[37]) player.rotateLeft() 
+		if(keys[37]) player.rotateLeft()
 		if(keys[39]) {
 			player.rotateRight()
 			//
@@ -132,7 +132,7 @@ window.onload=function(){
 		if(keys[32]) {
 			shootLaser()
 		}
-		
+
 
 		stage.x += ((-player.shape.x+stage.canvas.width/2) - stage.x) * 0.3 + Math.random() * quakePower;
 		stage.y += ((-player.shape.y+stage.canvas.height/2) - stage.y )* 0.3 + Math.random() * quakePower;
@@ -140,7 +140,7 @@ window.onload=function(){
 		tint.update()
 		//console.log(codeMirror.getValue())
 
-		
+
 
 		for(var p in playerArray) {
 			playerArray[p].update()
@@ -174,16 +174,16 @@ window.onload=function(){
 
 					var X = playerArray[p].shape.x;
 					var Y = playerArray[p].shape.y;
-					var d1 = CheckSide(X,Y,line1);	
+					var d1 = CheckSide(X,Y,line1);
 					var d2 = CheckSide(X,Y,line2);
 					var d3 = CheckSide(X,Y,line3);
 					var d4 = CheckSide(X,Y,line4);
-					
+
 					d1 = Math.abs(d1)/d1;
 					d2 = Math.abs(d2)/d2;
 					d3 = Math.abs(d3)/d3;
 					d4 = Math.abs(d4)/d4;
-					
+
 
 					if(d1 == d3 && d2 == d4){
 						playerArray[p].setHealth(0)
@@ -191,8 +191,8 @@ window.onload=function(){
 
 					}
 
-				
-				
+
+
 			}
 		}
 
@@ -204,7 +204,7 @@ window.onload=function(){
 			quake(20)
 			player.setHealth(player.health-0.2)
 			if(player.health <= 0.001) $('#game_over').css("display","block")
-			//Update health 
+			//Update health
 			socket.emit("update-health",{health:player.health,id:player.id})
 		}
 
@@ -247,12 +247,18 @@ window.onload=function(){
 	//Simulate key press
 	socket.on('key-press',function(msg){
 		var pl = player;
-		if(msg.id != player.id) pl = playerArray[msg.id];
+		if(msg.id != player.id) {
+      pl = playerArray[msg.id];
+    }
+		if(typeof(pl) === "undefined"){
+			console.error("Undefined player...");
+			return;
+		}
 		if(msg.keyMap['right']) pl.rotateRight();
 		if(msg.keyMap['left']) pl.rotateLeft();
 		if(msg.keyMap['up']) pl.thrust();
 		if(msg.keyMap['space']) shootLaser();
-	})	
+	})
 
 	//Someone is shooting!!
 	socket.on('shoot',function(msg){
@@ -302,7 +308,7 @@ window.onload=function(){
         });
 
 	$('#code_editor').css("display","none");
-	//Set up code button 
+	//Set up code button
 	$('#code_button').click(function(evt){
 		$('#code_button').css("display","none");
 		$('#close_button').css("display","block");
@@ -335,7 +341,7 @@ window.onload=function(){
 		$('#error_banner').css("display","block")
 		$('#error_text').html(msg.errorText)
 	})
-	
+
 	function quake(mag){
 		quakePower = mag;
 	}
