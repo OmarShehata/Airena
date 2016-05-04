@@ -72,7 +72,9 @@ window.onload=function(){
 	player.shape.x = 300;
 	player.shape.y = 100;
 
+	var gameid = window.location.pathname.split("/")[1]; // this only looks at the first dir in path
 	var socket = io();
+	socket.emit('join-game', { gameid: gameid });
 	socket.on('new-user', function(id){
 		CreateEnemyUser(id)
 	});
