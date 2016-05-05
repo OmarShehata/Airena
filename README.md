@@ -20,8 +20,8 @@ The game is written in [NodeJS](https://nodejs.org/en/), so make sure you have t
 * Clone/download this repository 
 * Run `npm install` to install dependencies 
 * Run `node airena.js` to initiate the server
-* Open http://localhost:5000 in your browser
-* Open another tab to see the multiplayer in action! 
+* Open http://localhost:5000 in your browser *(this will automatically create a room)*
+* Copy the URL with the room ID into a new tab to see the multiplayer in action! 
 
 ### Vision
 I'd love to decouple the "code and run" mechanic from the game itself, so it can be used as a module to drop in in any other game or simulation.
@@ -37,7 +37,7 @@ My (rough) current to do:
 * Create save slots for code in-game
 * Create more interesting AI examples to run in the game as examples
 * Decouple the code running mechanic from the actual game
-* Create rooms/id's so not everyone gets dropped in the same room when they open the link
+* ~~Create rooms/id's so not everyone gets dropped in the same room when they open the link~~ Completed by [SnoopJeDi](https://github.com/SnoopJeDi)
 
 ### Project Setup 
 All of the server logic and the code that runs the Javascript code in a sandbox is in **airena.js**. The client side game logic is in **src/init.js**
